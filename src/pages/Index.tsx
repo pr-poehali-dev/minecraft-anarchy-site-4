@@ -132,7 +132,7 @@ export default function Index() {
             <div className="w-8 h-8 flex items-center justify-center" style={{ background: "#00f5ff", boxShadow: "0 0 16px #00f5ff" }}>
               <span className="pixel-font text-[10px] text-black">CC</span>
             </div>
-            <span className="pixel-font text-xs neon-text-cyan hidden sm:block">CYBER<span className="neon-text-green">CRAFT</span></span>
+            <span className="pixel-font text-xs neon-text-cyan hidden sm:block">DELL<span className="neon-text-green">AND</span></span>
           </button>
 
           <div className="items-center gap-2 hidden md:flex">
@@ -185,13 +185,13 @@ export default function Index() {
           <div className="inline-flex items-center gap-2 mb-8 px-4 py-2" style={{ border: "1px solid #00f5ff44", background: "#00f5ff08" }}>
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" style={{ boxShadow: "0 0 6px #39ff14" }} />
             <span className="pixel-font text-gray-400" style={{ fontSize: "9px" }}>СЕРВЕР:</span>
-            <span className="pixel-font" style={{ color: "#00f5ff", fontSize: "9px" }}>play.cybercraft.ru</span>
+            <span className="pixel-font" style={{ color: "#00f5ff", fontSize: "9px" }}>delland.hypixel.ws</span>
           </div>
 
           <div className="mb-6">
-            <h1 className="pixel-font text-4xl md:text-6xl mb-2 glitch-text" data-text="CYBERCRAFT"
+            <h1 className="pixel-font text-4xl md:text-6xl mb-2 glitch-text" data-text="DELLAND"
               style={{ color: "#00f5ff", textShadow: "0 0 20px #00f5ff, 0 0 40px #00f5ff, 0 0 80px #00f5ff55" }}>
-              CYBERCRAFT
+              DELLAND
             </h1>
             <p className="pixel-font text-lg md:text-2xl" style={{ color: "#39ff14", textShadow: "0 0 10px #39ff14" }}>
               MINECRAFT SERVER
@@ -535,7 +535,7 @@ export default function Index() {
                 <div className="w-6 h-6 flex items-center justify-center" style={{ background: "#00f5ff", boxShadow: "0 0 12px #00f5ff" }}>
                   <span className="pixel-font text-black" style={{ fontSize: "8px" }}>CC</span>
                 </div>
-                <span className="pixel-font text-xs neon-text-cyan">CYBER<span className="neon-text-green">CRAFT</span></span>
+                <span className="pixel-font text-xs neon-text-cyan">DELL<span className="neon-text-green">AND</span></span>
               </div>
               <p className="text-gray-600 text-sm">Лучший кибер-майнкрафт сервер. Играем с 2024 года.</p>
             </div>
@@ -552,7 +552,7 @@ export default function Index() {
             <div>
               <div className="pixel-font neon-text-green mb-4" style={{ fontSize: "10px" }}>СЕРВЕР</div>
               <div className="space-y-2 text-sm">
-                <div className="text-gray-400">IP: <span style={{ color: "#00f5ff" }}>play.cybercraft.ru</span></div>
+                <div className="text-gray-400">IP: <span style={{ color: "#00f5ff" }}>delland.hypixel.ws</span></div>
                 <div className="text-gray-400">Версия: <span className="text-gray-300">1.20.4</span></div>
                 <div className="text-gray-400">Режим: <span className="text-gray-300">Survival</span></div>
               </div>
@@ -575,7 +575,7 @@ export default function Index() {
           </div>
 
           <div className="border-t pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderColor: "#1a2a3a" }}>
-            <div className="pixel-font text-gray-700" style={{ fontSize: "8px" }}>© 2024–2026 CYBERCRAFT. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
+            <div className="pixel-font text-gray-700" style={{ fontSize: "8px" }}>© 2024–2026 DELLAND. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-400" style={{ boxShadow: "0 0 6px #39ff14" }} />
               <span className="pixel-font text-green-400" style={{ fontSize: "8px" }}>СЕРВЕР ОНЛАЙН</span>
