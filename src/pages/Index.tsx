@@ -44,11 +44,22 @@ const RULES = [
   { num: "06", title: "Постройки в рамках", desc: "Не строй непристойный контент. Мегабашни должны быть на расстоянии от чужих территорий.", color: "green" },
 ];
 
-const STATS = [
-  { label: "ИГРОКОВ ОНЛАЙН", value: "247", icon: "Users", color: "#00f5ff" },
-  { label: "ВСЕГО ИГРОКОВ", value: "12 840", icon: "Globe", color: "#39ff14" },
-  { label: "ЧАСОВ СЫГРАНО", value: "890K", icon: "Clock", color: "#bf00ff" },
-  { label: "ДНЕЙ РАБОТЫ", value: "847", icon: "Shield", color: "#ff0090" },
+const MC_STATUS_URL = "https://functions.poehali.dev/e6703a36-ef5c-4de0-8e81-c5801d1fb499";
+
+// Дата запуска сервера (для подсчёта дней работы)
+const SERVER_START_DATE = new Date("2024-01-01");
+
+function getDaysOnline(): number {
+  const now = new Date();
+  const diff = now.getTime() - SERVER_START_DATE.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+const STATS_TEMPLATE = [
+  { label: "ИГРОКОВ ОНЛАЙН", key: "players_online", icon: "Users", color: "#00f5ff" },
+  { label: "СЛОТОВ ВСЕГО", key: "players_max", icon: "Globe", color: "#39ff14" },
+  { label: "ЧАСОВ СЫГРАНО", key: "hours_played", icon: "Clock", color: "#bf00ff" },
+  { label: "ДНЕЙ РАБОТЫ", key: "days_online", icon: "Shield", color: "#ff0090" },
 ];
 
 const COLOR_MAP: Record<string, string> = {
@@ -80,11 +91,52 @@ function NeonTag({ children, color }: { children: React.ReactNode; color: string
   );
 }
 
+interface ServerStatus {
+  online: boolean;
+  players_online: number;
+  players_max: number;
+  version: string;
+  motd: string;
+}
+
 export default function Index() {
   const [activeSection, setActiveSection] = useState("home");
   const [shopCategory, setShopCategory] = useState("Все");
   const [shopSearch, setShopSearch] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [serverStatus, setServerStatus] = useState<ServerStatus>({
+    online: false,
+    players_online: 0,
+    players_max: 0,
+    version: "1.16.5-1.21.1",
+    motd: "",
+  });
+  const [statusLoading, setStatusLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch(MC_STATUS_URL);
+        const raw = await res.json();
+        const data = typeof raw === "string" ? JSON.parse(raw) : raw;
+        setServerStatus(data);
+      } catch {
+        // оставляем дефолтные значения
+      } finally {
+        setStatusLoading(false);
+      }
+    };
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const statsValues: Record<string, string> = {
+    players_online: statusLoading ? "..." : String(serverStatus.players_online),
+    players_max: statusLoading ? "..." : String(serverStatus.players_max),
+    hours_played: "890K",
+    days_online: String(getDaysOnline()),
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -136,8 +188,16 @@ export default function Index() {
           </button>
 
           <div className="items-center gap-2 hidden md:flex">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" style={{ boxShadow: "0 0 8px #39ff14" }} />
-            <span className="pixel-font text-green-400" style={{ fontSize: "9px" }}>247 ОНЛАЙН</span>
+            <span
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{
+                background: serverStatus.online ? "#39ff14" : "#ff4444",
+                boxShadow: serverStatus.online ? "0 0 8px #39ff14" : "0 0 8px #ff4444",
+              }}
+            />
+            <span className="pixel-font" style={{ fontSize: "9px", color: serverStatus.online ? "#39ff14" : "#ff4444" }}>
+              {statusLoading ? "..." : `${serverStatus.players_online} ОНЛАЙН`}
+            </span>
           </div>
 
           <div className="hidden md:flex items-center gap-1">
@@ -208,12 +268,14 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {STATS.map((stat) => (
+            {STATS_TEMPLATE.map((stat) => (
               <div key={stat.label} className="card-cyber p-4 text-center">
                 <div className="mb-2 flex justify-center">
                   <Icon name={stat.icon} size={18} style={{ color: stat.color, filter: `drop-shadow(0 0 6px ${stat.color})` }} />
                 </div>
-                <div className="pixel-font text-xl mb-1" style={{ color: stat.color, textShadow: `0 0 10px ${stat.color}` }}>{stat.value}</div>
+                <div className="pixel-font text-xl mb-1" style={{ color: stat.color, textShadow: `0 0 10px ${stat.color}` }}>
+                  {statsValues[stat.key]}
+                </div>
                 <div className="text-gray-500 pixel-font" style={{ fontSize: "8px" }}>{stat.label}</div>
               </div>
             ))}
@@ -241,7 +303,7 @@ export default function Index() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                <span style={{ color: "#00f5ff" }}>CyberCraft</span> — это Minecraft сервер нового поколения, где классический геймплей встречается с неоновой кибер-эстетикой. Работаем с <span style={{ color: "#39ff14" }}>2024 года</span> и собрали тысячи игроков из всей России.
+                <span style={{ color: "#00f5ff" }}>Delland</span> — это Minecraft сервер нового поколения, где классический геймплей встречается с неоновой кибер-эстетикой. Работаем с <span style={{ color: "#39ff14" }}>2024 года</span> и собрали тысячи игроков из всей России.
               </p>
               <p className="text-gray-400 leading-relaxed mb-8">
                 Уникальные режимы игры, авторские плагины, активное сообщество и честная система без pay-to-win. Здесь важно лишь умение и командная работа.
@@ -249,9 +311,9 @@ export default function Index() {
 
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Версия", value: "1.20.4", color: "#00f5ff" },
+                  { label: "Версия", value: statusLoading ? "..." : (serverStatus.version || "1.16.5-1.21.1"), color: "#00f5ff" },
                   { label: "Режим", value: "Survival", color: "#39ff14" },
-                  { label: "Слоты", value: "500", color: "#bf00ff" },
+                  { label: "Слоты", value: statusLoading ? "..." : String(serverStatus.players_max || "500"), color: "#bf00ff" },
                   { label: "TPS", value: "20/20", color: "#ff0090" },
                 ].map((item) => (
                   <div key={item.label} className="card-cyber p-4">
@@ -577,8 +639,16 @@ export default function Index() {
           <div className="border-t pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderColor: "#1a2a3a" }}>
             <div className="pixel-font text-gray-700" style={{ fontSize: "8px" }}>© 2024–2026 DELLAND. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-400" style={{ boxShadow: "0 0 6px #39ff14" }} />
-              <span className="pixel-font text-green-400" style={{ fontSize: "8px" }}>СЕРВЕР ОНЛАЙН</span>
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{
+                  background: serverStatus.online ? "#39ff14" : "#ff4444",
+                  boxShadow: serverStatus.online ? "0 0 6px #39ff14" : "0 0 6px #ff4444",
+                }}
+              />
+              <span className="pixel-font" style={{ fontSize: "8px", color: serverStatus.online ? "#39ff14" : "#ff4444" }}>
+                {serverStatus.online ? "СЕРВЕР ОНЛАЙН" : "СЕРВЕР ОФЛАЙН"}
+              </span>
             </div>
           </div>
         </div>
